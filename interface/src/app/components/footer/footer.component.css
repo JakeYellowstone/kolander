@@ -1,0 +1,63 @@
+.footer {
+  background: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--cyber-blue);
+  box-shadow: 0 -4px 20px rgba(0, 245, 255, 0.1);
+  margin-top: auto;
+  padding: 1.5rem 0;
+}
+
+.footer-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.footer-text {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 400;
+}
+
+.eilor-link {
+  color: var(--eilor-violet);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  text-shadow: 0 0 5px var(--eilor-violet);
+}
+
+.eilor-link:hover {
+  color: var(--cyber-blue);
+  text-shadow: 0 0 15px var(--cyber-blue);
+  transform: scale(1.05);
+}
+
+.eilor-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--eilor-violet), var(--cyber-blue));
+  transition: width 0.3s ease;
+}
+
+.eilor-link:hover::after {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    padding: 0 1rem;
+  }
+  
+  .footer-text {
+    font-size: 0.8rem;
+  }
+}
