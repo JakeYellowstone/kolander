@@ -13,7 +13,7 @@ link :lien de Threat intelleigence Tool
 netconn_count : nombre de connexion entre l'ip et l'ip de destination
 sensor_criticality : sensibilité des machine, en fonction de leur poste
 
-total_hosts, incident
+total_hosts, score
 
 EDR utilisé : VMware Carbon Black (CB) Response
 
