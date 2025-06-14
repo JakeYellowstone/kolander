@@ -1,0 +1,135 @@
+<div class="results-container">
+    <div class="results-header">
+        <div class="results-stats grid grid-3">
+            <div class="stat-card card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <h3>{{ totalProcessed }}</h3>
+                    <p>Total Records</p>
+                </div>
+            </div>
+
+            <div class="stat-card card priority-high">
+                <div class="stat-icon">🚨</div>
+                <div class="stat-content">
+                    <h3>{{ threatsDetected }}</h3>
+                    <p>Threats Detected</p>
+                </div>
+            </div>
+
+            <div class="stat-card card priority-low">
+                <div class="stat-icon">✅</div>
+                <div class="stat-content">
+                    <h3>{{ ((threatsDetected / totalProcessed) * 100).toFixed(1) }}%</h3>
+                    <p>Detection Rate</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-controls">
+            <div class="priority-filters">
+                <button class="filter-btn" [class.active]="selectedPriority === 'all'"
+                    (click)="filterByPriority('all')">
+                    All ({{ filteredResults.length }})
+                </button>
+                <button class="filter-btn priority-high" [class.active]="selectedPriority === 'high'"
+                    (click)="filterByPriority('high')">
+                    High ({{ getPriorityCount('high') }})
+                </button>
+                <button class="filter-btn priority-medium" [class.active]="selectedPriority === 'medium'"
+                    (click)="filterByPriority('medium')">
+                    Medium ({{ getPriorityCount('medium') }})
+                </button>
+                <button class="filter-btn priority-low" [class.active]="selectedPriority === 'low'"
+                    (click)="filterByPriority('low')">
+                    Low ({{ getPriorityCount('low') }})
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-table-container">
+        <div class="table-wrapper">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Priority</th>
+                        <th>Group</th>
+                        <th>Host</th>
+                        <th>Process</th>
+                        <th>Alert Severity</th>
+                        <th>Confidence</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let result of paginatedResults; trackBy: trackByIndex"
+                        class="result-row animate-fadeInUp" [class]="'priority-' + result.finalPriority">
+                        <td>
+                            <div class="priority-indicator">
+                                <span class="priority-badge" [class]="'priority-' + result.finalPriority">
+                                    {{ result.finalPriority.toUpperCase() }}
+                                </span>
+                                <div class="priority-score">{{ (result.priorityScore * 100).toFixed(0) }}%</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="group-info">
+                                <span class="group-name">{{ result.group }}</span>
+                                <span class="group-multiplier">×{{ result.groupMultiplier }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="host-info">
+                                <span class="hostname">{{ result.hostname }}</span>
+                                <span class="username">{{ result.username }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="process-info">
+                                <span class="process-name">{{ result.process_name }}</span>
+                                <span class="process-path">{{ result.path }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="severity-badge" [class]="'severity-' + result.alert_severity">
+                                {{ result.alert_severity }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="confidence-meter">
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" [style.width.%]="result.confidence * 100"
+                                        [class]="getConfidenceClass(result.confidence)"></div>
+                                </div>
+                                <span class="confidence-value">{{ (result.confidence * 100).toFixed(1) }}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="details-btn btn" (click)="showDetails(result)">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination" *ngIf="totalPages > 1">
+            <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                ← Previous
+            </button>
+
+            <div class="page-numbers">
+                <button *ngFor="let page of getPageNumbers()" class="page-btn" [class.active]="page === currentPage"
+                    (click)="goToPage(page)">
+                    {{ page }}
+                </button>
+            </div>
+
+            <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+                Next →
+            </button>
+        </div>
+    </div>
+</div>

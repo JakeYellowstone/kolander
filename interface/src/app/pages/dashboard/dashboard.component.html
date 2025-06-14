@@ -1,0 +1,87 @@
+<div class="dashboard animate-fadeInUp">
+    <div class="dashboard-header">
+        <h1>Security Dashboard</h1>
+        <p>Real-time threat intelligence and analysis overview</p>
+    </div>
+
+    <div class="stats-grid grid grid-3">
+        <div class="stat-card card">
+            <div class="stat-icon">🛡️</div>
+            <div class="stat-content">
+                <h3>{{ stats.totalAlerts }}</h3>
+                <p>Total Alerts Analyzed</p>
+            </div>
+        </div>
+
+        <div class="stat-card card priority-high">
+            <div class="stat-icon">🚨</div>
+            <div class="stat-content">
+                <h3>{{ stats.highPriorityAlerts }}</h3>
+                <p>High Priority Threats</p>
+            </div>
+        </div>
+
+        <div class="stat-card card priority-medium">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-content">
+                <h3>{{ stats.mediumPriorityAlerts }}</h3>
+                <p>Medium Priority Alerts</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-content grid grid-2">
+        <div class="panel card">
+            <h2>Recent Threat Analysis</h2>
+            <div class="recent-alerts">
+                <div *ngFor="let alert of recentAlerts" class="alert-item" [ngClass]="'priority-' + alert.priority">
+                    <div class="alert-info">
+                        <h4>{{ alert.group }}</h4>
+                        <p>{{ alert.description }}</p>
+                        <small>{{ alert.timestamp | date:'short' }}</small>
+                    </div>
+                    <div class="alert-severity">
+                        <span class="severity-badge">{{ alert.severity }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel card">
+            <h2>System Status</h2>
+            <div class="system-status">
+                <div class="status-item">
+                    <span class="status-label">AI Models</span>
+                    <span class="status-value online">Operational</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Data Processing</span>
+                    <span class="status-value online">Active</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Threat Intelligence</span>
+                    <span class="status-value online">Updated</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Security Policies</span>
+                    <span class="status-value online">Enforced</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="actions-grid grid grid-3">
+            <button class="action-btn btn" routerLink="/analysis">
+                📊 New Analysis
+            </button>
+            <button class="action-btn btn btn-success" routerLink="/config">
+                ⚙️ Configure Rules
+            </button>
+            <button class="action-btn btn btn-danger" (click)="refreshData()">
+                🔄 Refresh Data
+            </button>
+        </div>
+    </div>
+</div>

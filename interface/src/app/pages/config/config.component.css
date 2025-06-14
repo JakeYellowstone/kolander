@@ -1,0 +1,271 @@
+.config-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-header h1 {
+  color: var(--cyber-blue);
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.config-sections {
+  margin-bottom: 3rem;
+  gap: 2rem;
+}
+
+.config-section {
+  padding: 2rem;
+}
+
+.config-section h2 {
+  color: var(--cyber-blue);
+  margin-bottom: 0.5rem;
+}
+
+.section-description {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.rule-item {
+  background: var(--secondary-bg);
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+.rule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.rule-header h4 {
+  color: var(--cyber-green);
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--cyber-blue);
+  font-size: 0.9rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--primary-bg);
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--cyber-blue);
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
+}
+
+small {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.range-input {
+  width: 100%;
+  height: 6px;
+  background: var(--secondary-bg);
+  border-radius: 3px;
+  outline: none;
+  margin-bottom: 0.5rem;
+}
+
+.range-input::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--cyber-blue);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--shadow-glow);
+}
+
+.range-value {
+  text-align: center;
+  font-weight: 600;
+  color: var(--cyber-blue);
+  font-size: 1.1rem;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-label {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--secondary-bg);
+  border: 2px solid rgba(0, 245, 255, 0.3);
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.toggle-label:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+input:checked + .toggle-label {
+  background: var(--cyber-blue);
+  border-color: var(--cyber-blue);
+  box-shadow: var(--shadow-glow);
+}
+
+input:checked + .toggle-label:before {
+  transform: translateX(30px);
+  background: var(--primary-bg);
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.current-config {
+  padding: 2rem;
+}
+
+.current-config h2 {
+  color: var(--cyber-blue);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.config-display {
+  gap: 2rem;
+}
+
+.config-group h3 {
+  color: var(--cyber-green);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.rules-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rule-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--secondary-bg);
+  border-radius: 4px;
+  border-left: 3px solid var(--cyber-blue);
+}
+
+.group-name {
+  font-weight: 500;
+}
+
+.multiplier {
+  font-weight: 600;
+  color: var(--cyber-orange);
+}
+
+.thresholds-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.threshold-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--secondary-bg);
+  border-radius: 4px;
+  border-left: 3px solid var(--cyber-green);
+}
+
+.threshold-value {
+  font-weight: 600;
+  color: var(--cyber-blue);
+}
+
+@media (max-width: 768px) {
+  .config-sections {
+    grid-template-columns: 1fr;
+  }
+
+  .config-display {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .rule-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+}
