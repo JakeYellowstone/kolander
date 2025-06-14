@@ -17,48 +17,64 @@ export class DashboardComponent implements OnInit {
     mediumPriorityAlerts: 0
   };
 
+  systemStatus = {
+    modelsLoaded: false,
+    backendConnected: false,
+    lastUpdate: new Date()
+  };
+
   recentAlerts = [
     {
       group: 'Executive Team',
-      description: 'Suspicious process execution detected',
-      severity: 'Critical',
-      priority: 'high',
-      timestamp: new Date(Date.now() - 5 * 60 * 1000)
-    },
-    {
-      group: 'Development Team',
-      description: 'Unusual network activity observed',
-      severity: 'High',
-      priority: 'medium',
-      timestamp: new Date(Date.now() - 15 * 60 * 1000)
-    },
-    {
-      group: 'General Users',
-      description: 'Policy violation detected',
-      severity: 'Medium',
+      description: 'Analyse en attente - Chargez un fichier EDR',
+      severity: 'Info',
       priority: 'low',
-      timestamp: new Date(Date.now() - 30 * 60 * 1000)
+      timestamp: new Date()
     }
   ];
 
   constructor(private analysisService: AnalysisService) {}
 
   ngOnInit() {
-    this.loadStats();
+    this.loadSystemStatus();
   }
 
-  loadStats() {
-    // Simulate loading stats from analysis results
-    this.stats = {
-      totalAlerts: 1247,
-      highPriorityAlerts: 23,
-      mediumPriorityAlerts: 89
-    };
+  loadSystemStatus() {
+    this.analysisService.getHealth().subscribe({
+      next: (health) => {
+        this.systemStatus.modelsLoaded = health.modelsLoaded;
+        this.systemStatus.backendConnected = true;
+        this.systemStatus.lastUpdate = new Date();
+        
+        if (health.modelsLoaded) {
+          this.recentAlerts = [
+            {
+              group: 'Système',
+              description: 'Modèles ML chargés et prêts pour l\'analyse',
+              severity: 'Success',
+              priority: 'low',
+              timestamp: new Date()
+            }
+          ];
+        }
+      },
+      error: (error) => {
+        this.systemStatus.backendConnected = false;
+        this.recentAlerts = [
+          {
+            group: 'Système',
+            description: 'Erreur de connexion au backend',
+            severity: 'Error',
+            priority: 'high',
+            timestamp: new Date()
+          }
+        ];
+      }
+    });
   }
 
   refreshData() {
-    this.loadStats();
-    // Add visual feedback for refresh action
-    console.log('Data refreshed');
+    this.loadSystemStatus();
+    console.log('System status refreshed');
   }
 }

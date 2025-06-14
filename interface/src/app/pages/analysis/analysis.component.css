@@ -18,6 +18,33 @@
   font-size: 1.1rem;
 }
 
+.error-message {
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--cyber-red);
+  background: rgba(255, 7, 58, 0.1);
+}
+
+.error-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.error-icon {
+  font-size: 2rem;
+  color: var(--cyber-red);
+}
+
+.error-content h3 {
+  color: var(--cyber-red);
+  margin: 0 0 0.5rem 0;
+}
+
+.error-content p {
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+}
+
 .analysis-workflow {
   display: flex;
   flex-direction: column;
@@ -131,5 +158,10 @@
 
   .process-step {
     justify-content: center;
+  }
+
+  .error-content {
+    flex-direction: column;
+    text-align: center;
   }
 }

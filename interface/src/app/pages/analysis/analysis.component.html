@@ -4,6 +4,18 @@
         <p>Chargez les données EDR pour une analyse de sécurité basée sur l'IA</p>
     </div>
 
+    <!-- Error Message -->
+    <div class="error-message card" *ngIf="errorMessage && !isProcessing">
+        <div class="error-content">
+            <div class="error-icon">⚠️</div>
+            <div>
+                <h3>Erreur d'Analyse</h3>
+                <p>{{ errorMessage }}</p>
+                <button class="btn btn-danger" (click)="resetAnalysis()">Réessayer</button>
+            </div>
+        </div>
+    </div>
+
     <div class="analysis-workflow">
         <!-- Step 1: File Upload -->
         <div class="workflow-step" [class.completed]="uploadCompleted">
@@ -27,15 +39,15 @@
                     <div class="process-steps">
                         <div class="process-step" [class.completed]="processSteps.parsing">
                             <span class="step-icon">📊</span>
-                            <span>Récupération Données</span>
+                            <span>Préparation Données</span>
                         </div>
                         <div class="process-step" [class.completed]="processSteps.binaryPrediction">
                             <span class="step-icon">🤖</span>
-                            <span>Classification Binaire</span>
+                            <span>Classification Binaire (XGBoost)</span>
                         </div>
                         <div class="process-step" [class.completed]="processSteps.priorityClassification">
                             <span class="step-icon">🎯</span>
-                            <span>Priorisation Alertes</span>
+                            <span>Priorisation (RandomForest)</span>
                         </div>
                         <div class="process-step" [class.completed]="processSteps.groupModulation">
                             <span class="step-icon">👥</span>

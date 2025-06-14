@@ -118,6 +118,18 @@
   text-transform: uppercase;
 }
 
+.severity-badge.severity-success {
+  background: var(--cyber-green);
+}
+
+.severity-badge.severity-error {
+  background: var(--cyber-red);
+}
+
+.severity-badge.severity-info {
+  background: var(--cyber-blue);
+}
+
 .system-status {
   display: flex;
   flex-direction: column;
@@ -152,6 +164,12 @@
   background: rgba(57, 255, 20, 0.2);
   color: var(--cyber-green);
   border: 1px solid var(--cyber-green);
+}
+
+.status-value.offline {
+  background: rgba(255, 7, 58, 0.2);
+  color: var(--cyber-red);
+  border: 1px solid var(--cyber-red);
 }
 
 .quick-actions h2 {

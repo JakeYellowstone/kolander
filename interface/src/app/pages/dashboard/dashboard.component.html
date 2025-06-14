@@ -32,7 +32,45 @@
 
     <div class="dashboard-content grid grid-2">
         <div class="panel card">
-            <h2>Résentes Analyses de Ménaces</h2>
+            <h2>État du Système</h2>
+            <div class="system-status">
+                <div class="status-item">
+                    <span class="status-label">Backend API</span>
+                    <span class="status-value" [class.online]="systemStatus.backendConnected" 
+                          [class.offline]="!systemStatus.backendConnected">
+                        {{ systemStatus.backendConnected ? 'Connecté' : 'Déconnecté' }}
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Modèles ML</span>
+                    <span class="status-value" [class.online]="systemStatus.modelsLoaded" 
+                          [class.offline]="!systemStatus.modelsLoaded">
+                        {{ systemStatus.modelsLoaded ? 'Chargés' : 'Non chargés' }}
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Classification Binaire</span>
+                    <span class="status-value" [class.online]="systemStatus.modelsLoaded">
+                        {{ systemStatus.modelsLoaded ? 'XGBoost Prêt' : 'Indisponible' }}
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Priorisation</span>
+                    <span class="status-value" [class.online]="systemStatus.modelsLoaded">
+                        {{ systemStatus.modelsLoaded ? 'RandomForest Prêt' : 'Indisponible' }}
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Dernière Mise à Jour</span>
+                    <span class="status-value online">
+                        {{ systemStatus.lastUpdate | date:'short' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel card">
+            <h2>Notifications Système</h2>
             <div class="recent-alerts">
                 <div *ngFor="let alert of recentAlerts" class="alert-item" [ngClass]="'priority-' + alert.priority">
                     <div class="alert-info">
@@ -41,30 +79,10 @@
                         <small>{{ alert.timestamp | date:'short' }}</small>
                     </div>
                     <div class="alert-severity">
-                        <span class="severity-badge">{{ alert.severity }}</span>
+                        <span class="severity-badge" [ngClass]="'severity-' + alert.severity.toLowerCase()">
+                            {{ alert.severity }}
+                        </span>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel card">
-            <h2>État du Système</h2>
-            <div class="system-status">
-                <div class="status-item">
-                    <span class="status-label">Modèles IA</span>
-                    <span class="status-value online">Opérationnel</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Traitement Données</span>
-                    <span class="status-value online">Actif</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Threat Intelligence</span>
-                    <span class="status-value online">Mise à jour</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Politique Sécurité</span>
-                    <span class="status-value online">Strict</span>
                 </div>
             </div>
         </div>
@@ -80,7 +98,7 @@
                 ⚙️ Configurer Règles
             </button>
             <button class="action-btn btn btn-danger" (click)="refreshData()">
-                🔄 Actualiser Données
+                🔄 Actualiser État
             </button>
         </div>
     </div>
