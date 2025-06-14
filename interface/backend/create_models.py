@@ -13,11 +13,7 @@ def create_binary_model():
     print("Creating binary classification model...")
     
     # Load dataset
-<<<<<<< HEAD
-    df = pd.read_excel("../../data.xlsx")
-=======
     df = pd.read_excel("data.xlsx")
->>>>>>> 549e999 (Implémentation des models)
     
     # Drop unnecessary columns
     drop_cols = [
@@ -77,11 +73,7 @@ def create_priority_model():
     print("Creating priority classification model...")
     
     # Load dataset
-<<<<<<< HEAD
-    df = pd.read_excel("../../data.xlsx")
-=======
     df = pd.read_excel("data.xlsx")
->>>>>>> 549e999 (Implémentation des models)
     
     # Drop unnecessary columns
     drop_cols = [

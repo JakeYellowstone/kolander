@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="Cyber EDR Analysis API",
+    title="Kolander OCI Analysis API",
     description="AI-powered security analysis for VMware Carbon Black EDR data",
     version="2.0.0"
 )
@@ -169,6 +169,14 @@ def normalize_group_name(group: str) -> str:
     else:
         return 'user'
 
+def safe_int(val, default=0):
+    try:
+        if pd.isna(val):
+            return default
+        return int(float(val))  # Convertit même les "42.0" ou strings numériques
+    except (ValueError, TypeError):
+        return default
+
 @app.post("/analyze")
 async def analyze_edr_data(file: UploadFile = File(...)):
     """Analyze uploaded EDR data file using real ML models"""
@@ -273,7 +281,7 @@ async def analyze_edr_data(file: UploadFile = File(...)):
             
             # Create result record
             result = {
-                'id': int(idx),
+                'id': safe_int(idx),
                 'group': group,
                 'hostname': str(row.get('hostname', row.get('host_name', 'Unknown'))),
                 'username': str(row.get('username', row.get('user_name', 'Unknown'))),
@@ -285,15 +293,15 @@ async def analyze_edr_data(file: UploadFile = File(...)):
                 'groupMultiplier': float(group_multiplier),
                 'priorityScore': float(final_priority_score),
                 'finalPriority': final_priority,
-                'childproc_count': int(row.get('childproc_count', row.get('crossproc_count', 0))),
-                'netconn_count': int(row.get('netconn_count', row.get('networkconn_count', 0))),
-                'filemod_count': int(row.get('filemod_count', 0)),
+                'childproc_count': safe_int(row.get('childproc_count', row.get('crossproc_count', 0))),
+                'netconn_count': safe_int(row.get('netconn_count', row.get('networkconn_count', 0))),
+                'filemod_count': safe_int(row.get('filemod_count', 0)),
                 'timestamp': datetime.now().isoformat(),
                 'cmdline': str(row.get('cmdline', '')),
                 'parent_name': str(row.get('parent_name', 'Unknown')),
-                'sensor_id': int(row.get('sensor_id', 0)),
-                'process_pid': int(row.get('process_pid', row.get('process_id', 0))),
-                'parent_pid': int(row.get('parent_pid', 0)),
+                'sensor_id': safe_int(row.get('sensor_id', 0)),
+                'process_pid': safe_int(row.get('process_pid', row.get('process_id', 0))),
+                'parent_pid': safe_int(row.get('parent_pid', 0)),
                 'ioc_type': str(row.get('ioc_type', 'Unknown')),
                 'ioc_value': str(row.get('ioc_value', 'Unknown')),
                 'feed_name': str(row.get('feed_name', 'Unknown'))
