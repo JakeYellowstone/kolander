@@ -43,22 +43,18 @@ def create_binary_model():
         X_resampled, y_resampled, test_size=0.2, random_state=42, stratify=y_resampled
     )
     
-    # Train XGBoost model
-    xgb_model = XGBClassifier(
+    
+    # Train Random model
+    classement = RandomForestClassifier(
         n_estimators=200,
-        learning_rate=0.05,
-        max_depth=6,
-        subsample=0.8,
-        colsample_bytree=0.8,
-        eval_metric="logloss",
         random_state=42
     )
     
-    xgb_model.fit(X_train, y_train)
+    classement.fit(X_train, y_train)
     
     # Save model and scaler
     os.makedirs("models", exist_ok=True)
-    joblib.dump(xgb_model, "models/binary_model.pkl")
+    joblib.dump(classement, "models/binary_model.pkl")
     joblib.dump(scaler, "models/scaler.pkl")
     
     # Save feature names for later use
@@ -66,7 +62,7 @@ def create_binary_model():
     joblib.dump(feature_names, "models/feature_names.pkl")
     
     print(f"Binary model saved with {len(feature_names)} features")
-    return xgb_model, scaler, feature_names
+    return classement, scaler, feature_names
 
 def create_priority_model():
     """Create and save priority classification model"""
@@ -106,8 +102,6 @@ def create_priority_model():
     # Train RandomForest model
     rf_model = RandomForestClassifier(
         n_estimators=200,
-        max_depth=10,
-        class_weight="balanced",
         random_state=42
     )
     

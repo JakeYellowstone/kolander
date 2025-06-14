@@ -51,13 +51,13 @@
                 <div class="status-item">
                     <span class="status-label">Classification Binaire</span>
                     <span class="status-value" [class.online]="systemStatus.modelsLoaded">
-                        {{ systemStatus.modelsLoaded ? 'XGBoost Prêt' : 'Indisponible' }}
+                        {{ systemStatus.modelsLoaded ? 'Model 1 Prêt' : 'Indisponible' }}
                     </span>
                 </div>
                 <div class="status-item">
                     <span class="status-label">Priorisation</span>
                     <span class="status-value" [class.online]="systemStatus.modelsLoaded">
-                        {{ systemStatus.modelsLoaded ? 'RandomForest Prêt' : 'Indisponible' }}
+                        {{ systemStatus.modelsLoaded ? 'Model 2 Prêt' : 'Indisponible' }}
                     </span>
                 </div>
                 <div class="status-item">
