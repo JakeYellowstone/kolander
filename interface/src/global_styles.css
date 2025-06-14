@@ -5,15 +5,15 @@
   --primary-bg: #0a0a0a;
   --secondary-bg: #111111;
   --surface-bg: #1a1a1a;
-  --cyber-blue: #00f5ff;
-  --cyber-green: #39ff14;
+  --cyber-blue: #52a1f7;
+  --cyber-green: #441fa7;
   --cyber-red: #ff073a;
   --cyber-orange: #ff8c00;
-  --cyber-purple: #8a2be2;
+  --cyber-purple: #e65ff9;
   --text-primary: #ffffff;
   --text-secondary: #b0b0b0;
   --text-muted: #666666;
-  --border-glow: #00f5ff;
+  --border-glow: #52a1f7;
   --shadow-glow: 0 0 20px rgba(0, 245, 255, 0.3);
   --shadow-glow-intense: 0 0 30px rgba(0, 245, 255, 0.6);
 }

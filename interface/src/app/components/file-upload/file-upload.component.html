@@ -1,0 +1,59 @@
+<div class="file-upload-container">
+    <div class="file-upload" [class.drag-over]="isDragOver" (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)" (drop)="onFileDropped($event)" (click)="fileInput.click()">
+
+        <input #fileInput type="file" accept=".xlsx,.xls,.csv" (change)="onFileSelected($event)" style="display: none;">
+
+        <div class="upload-content">
+            <div class="upload-icon">📊</div>
+            <h3>Charger Fichier EDR</h3>
+            <p>Déposez votre fichier Excel ici ou cliquez pour parcourir</p>
+            <div class="supported-formats">
+                <span class="format-badge">.XLSX</span>
+                <span class="format-badge">.XLS</span>
+                <span class="format-badge">.CSV</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="upload-progress" *ngIf="isUploading">
+        <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="uploadProgress"></div>
+        </div>
+        <p>Tratement fichier... {{ uploadProgress }}%</p>
+    </div>
+
+    <div class="file-info" *ngIf="uploadedFile">
+        <div class="file-details card">
+            <h4>Information sur fichier</h4>
+            <div class="file-stats">
+                <div class="stat">
+                    <span class="label">Nom:</span>
+                    <span class="value">{{ uploadedFile.name }}</span>
+                </div>
+                <div class="stat">
+                    <span class="label">Taille:</span>
+                    <span class="value">{{ formatFileSize(uploadedFile.size) }}</span>
+                </div>
+                <div class="stat">
+                    <span class="label">Lignes:</span>
+                    <span class="value">{{ parsedData.length }}</span>
+                </div>
+                <div class="stat">
+                    <span class="label">Colonnes:</span>
+                    <span class="value">{{ parsedColumns.length }}</span>
+                </div>
+            </div>
+
+            <div class="detected-fields">
+                <h5>Champs EDR Détectés</h5>
+                <div class="fields-grid">
+                    <span *ngFor="let field of detectedEdrFields" class="field-badge" [class.found]="field.found">
+                        {{ field.name }}
+                        <span class="field-status">{{ field.found ? '✓' : '✗' }}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

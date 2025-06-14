@@ -1,7 +1,7 @@
 <div class="analysis-page animate-fadeInUp">
     <div class="page-header">
-        <h1>Threat Analysis</h1>
-        <p>Upload EDR data for AI-powered security analysis</p>
+        <h1>Analyse Menace</h1>
+        <p>Chargez les données EDR pour une analyse de sécurité basée sur l'IA</p>
     </div>
 
     <div class="analysis-workflow">
@@ -9,7 +9,7 @@
         <div class="workflow-step" [class.completed]="uploadCompleted">
             <div class="step-header">
                 <div class="step-number">1</div>
-                <h2>Upload EDR Data</h2>
+                <h2>Charger Données EDR</h2>
             </div>
             <app-file-upload (fileUploaded)="onFileUploaded($event)" (uploadProgress)="onUploadProgress($event)">
             </app-file-upload>
@@ -19,7 +19,7 @@
         <div class="workflow-step" [class.active]="isProcessing" [class.completed]="analysisCompleted">
             <div class="step-header">
                 <div class="step-number">2</div>
-                <h2>AI Analysis</h2>
+                <h2>Analyse IA</h2>
             </div>
             <div class="processing-panel card" *ngIf="isProcessing || analysisCompleted">
                 <div class="processing-status">
@@ -27,19 +27,19 @@
                     <div class="process-steps">
                         <div class="process-step" [class.completed]="processSteps.parsing">
                             <span class="step-icon">📊</span>
-                            <span>Data Parsing</span>
+                            <span>Récupération Données</span>
                         </div>
                         <div class="process-step" [class.completed]="processSteps.binaryPrediction">
                             <span class="step-icon">🤖</span>
-                            <span>Binary Classification</span>
+                            <span>Classification Binaire</span>
                         </div>
                         <div class="process-step" [class.completed]="processSteps.priorityClassification">
                             <span class="step-icon">🎯</span>
-                            <span>Priority Analysis</span>
+                            <span>Priorisation Alertes</span>
                         </div>
                         <div class="process-step" [class.completed]="processSteps.groupModulation">
                             <span class="step-icon">👥</span>
-                            <span>Group Priority Modulation</span>
+                            <span>Modulation Priorité Groupe</span>
                         </div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
         <div class="workflow-step" [class.active]="analysisCompleted">
             <div class="step-header">
                 <div class="step-number">3</div>
-                <h2>Analysis Results</h2>
+                <h2>Résultats Analyse</h2>
             </div>
             <app-results-table *ngIf="analysisCompleted" [results]="analysisResults" [totalProcessed]="totalProcessed"
                 [threatsDetected]="threatsDetected">

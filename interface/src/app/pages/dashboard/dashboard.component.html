@@ -9,7 +9,7 @@
             <div class="stat-icon">🛡️</div>
             <div class="stat-content">
                 <h3>{{ stats.totalAlerts }}</h3>
-                <p>Total Alerts Analyzed</p>
+                <p>Total Alertes Analysées</p>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
             <div class="stat-icon">🚨</div>
             <div class="stat-content">
                 <h3>{{ stats.highPriorityAlerts }}</h3>
-                <p>High Priority Threats</p>
+                <p>Menaces d'Haute Priorités</p>
             </div>
         </div>
 
@@ -25,14 +25,14 @@
             <div class="stat-icon">⚠️</div>
             <div class="stat-content">
                 <h3>{{ stats.mediumPriorityAlerts }}</h3>
-                <p>Medium Priority Alerts</p>
+                <p>Alerte de Priorité Moyenne</p>
             </div>
         </div>
     </div>
 
     <div class="dashboard-content grid grid-2">
         <div class="panel card">
-            <h2>Recent Threat Analysis</h2>
+            <h2>Résentes Analyses de Ménaces</h2>
             <div class="recent-alerts">
                 <div *ngFor="let alert of recentAlerts" class="alert-item" [ngClass]="'priority-' + alert.priority">
                     <div class="alert-info">
@@ -48,39 +48,39 @@
         </div>
 
         <div class="panel card">
-            <h2>System Status</h2>
+            <h2>État du Système</h2>
             <div class="system-status">
                 <div class="status-item">
-                    <span class="status-label">AI Models</span>
-                    <span class="status-value online">Operational</span>
+                    <span class="status-label">Modèles IA</span>
+                    <span class="status-value online">Opérationnel</span>
                 </div>
                 <div class="status-item">
-                    <span class="status-label">Data Processing</span>
-                    <span class="status-value online">Active</span>
+                    <span class="status-label">Traitement Données</span>
+                    <span class="status-value online">Actif</span>
                 </div>
                 <div class="status-item">
                     <span class="status-label">Threat Intelligence</span>
-                    <span class="status-value online">Updated</span>
+                    <span class="status-value online">Mise à jour</span>
                 </div>
                 <div class="status-item">
-                    <span class="status-label">Security Policies</span>
-                    <span class="status-value online">Enforced</span>
+                    <span class="status-label">Politique Sécurité</span>
+                    <span class="status-value online">Strict</span>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="quick-actions">
-        <h2>Quick Actions</h2>
+        <h2>Actions Rapides</h2>
         <div class="actions-grid grid grid-3">
             <button class="action-btn btn" routerLink="/analysis">
-                📊 New Analysis
+                📊 Faire Une Analyse
             </button>
             <button class="action-btn btn btn-success" routerLink="/config">
-                ⚙️ Configure Rules
+                ⚙️ Configurer Règles
             </button>
             <button class="action-btn btn btn-danger" (click)="refreshData()">
-                🔄 Refresh Data
+                🔄 Actualiser Données
             </button>
         </div>
     </div>
