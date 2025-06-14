@@ -1,0 +1,13 @@
+<div *ngIf="show" class="modal-overlay" (click)="onCancel()"></div>
+
+<div *ngIf="show" class="modal-content animate-zoomIn">
+  <h2>Détails de l'Alerte</h2>
+  <button class="close-btn" (click)="onCancel()">x</button>
+
+  <div class="alert-details">
+    <div class="detail-row" *ngFor="let key of getKeys(menace)">
+      <span class="detail-key">{{ key }}</span> : 
+      <span class="detail-value">{{ menace[key] }}</span>
+    </div>
+  </div>
+</div>

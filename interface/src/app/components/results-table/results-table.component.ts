@@ -6,13 +6,14 @@ import {
   SimpleChanges,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { DetailModalComponent } from "../modal_d\u00E9tails/details.component";
 
 @Component({
   selector: "app-results-table",
   standalone: true,
   templateUrl: "results-table.component.html",
   styleUrl: "./results-table.component.css",
-  imports: [CommonModule],
+  imports: [CommonModule, DetailModalComponent],
 })
 export class ResultsTableComponent implements OnInit, OnChanges {
   @Input() results: any[] = [];
@@ -25,6 +26,15 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   currentPage = 1;
   itemsPerPage = 10;
   totalPages = 1;
+
+  //Gestion boite modal suppression
+  modalVisible = false;
+  menace: '' | null = null;
+
+  handleCancel(): void {
+    this.modalVisible = false;
+    this.menace = null;
+  }
 
   ngOnInit() {
     this.filterByPriority("all");
@@ -95,7 +105,8 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   }
 
   showDetails(result: any) {
-    // Implement details modal or navigation
+    this.modalVisible = true;
+    this.menace = result;
     console.log("Show details for:", result);
   }
 
