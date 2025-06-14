@@ -5,7 +5,7 @@
                 <div class="stat-icon">📊</div>
                 <div class="stat-content">
                     <h3>{{ totalProcessed }}</h3>
-                    <p>Total Records</p>
+                    <p>Total Lignes</p>
                 </div>
             </div>
 
@@ -13,7 +13,7 @@
                 <div class="stat-icon">🚨</div>
                 <div class="stat-content">
                     <h3>{{ threatsDetected }}</h3>
-                    <p>Threats Detected</p>
+                    <p>Menaces Détectées</p>
                 </div>
             </div>
 
@@ -21,7 +21,7 @@
                 <div class="stat-icon">✅</div>
                 <div class="stat-content">
                     <h3>{{ ((threatsDetected / totalProcessed) * 100).toFixed(1) }}%</h3>
-                    <p>Detection Rate</p>
+                    <p>Taux Détection</p>
                 </div>
             </div>
         </div>
@@ -30,19 +30,19 @@
             <div class="priority-filters">
                 <button class="filter-btn" [class.active]="selectedPriority === 'all'"
                     (click)="filterByPriority('all')">
-                    All ({{ filteredResults.length }})
+                    Toutes ({{ filteredResults.length }})
                 </button>
                 <button class="filter-btn priority-high" [class.active]="selectedPriority === 'high'"
                     (click)="filterByPriority('high')">
-                    High ({{ getPriorityCount('high') }})
+                    Haute ({{ getPriorityCount('high') }})
                 </button>
                 <button class="filter-btn priority-medium" [class.active]="selectedPriority === 'medium'"
                     (click)="filterByPriority('medium')">
-                    Medium ({{ getPriorityCount('medium') }})
+                    Moyenne ({{ getPriorityCount('medium') }})
                 </button>
                 <button class="filter-btn priority-low" [class.active]="selectedPriority === 'low'"
                     (click)="filterByPriority('low')">
-                    Low ({{ getPriorityCount('low') }})
+                    Basse ({{ getPriorityCount('low') }})
                 </button>
             </div>
         </div>
@@ -53,13 +53,13 @@
             <table class="results-table">
                 <thead>
                     <tr>
-                        <th>Priority</th>
-                        <th>Group</th>
-                        <th>Host</th>
-                        <th>Process</th>
-                        <th>Alert Severity</th>
-                        <th>Confidence</th>
-                        <th>Details</th>
+                        <th>Priorité</th>
+                        <th>Groupe</th>
+                        <th>Machine</th>
+                        <th>Processus</th>
+                        <th>Gravité Alerte</th>
+                        <th>Confiance</th>
+                        <th>Détails</th>
                     </tr>
                 </thead>
                 <tbody>
