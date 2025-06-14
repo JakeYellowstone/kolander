@@ -117,3 +117,24 @@
     font-size: 0.8rem;
   }
 }
+
+.logo img {
+  width: 50px;
+  height: auto;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+  filter: drop-shadow(0 0 5px var(--cyber-blue));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px var(--cyber-green));
+}
+
+.logo h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
