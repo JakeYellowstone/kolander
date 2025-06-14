@@ -83,7 +83,7 @@ label {
 .form-control {
   width: 100%;
   padding: 0.75rem;
-  background: var(--primary-bg);
+  background: var(--surface-bg);
   border: 1px solid rgba(0, 245, 255, 0.3);
   border-radius: 4px;
   color: var(--text-primary);

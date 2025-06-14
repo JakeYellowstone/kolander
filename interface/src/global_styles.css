@@ -2,18 +2,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary-bg: #0a0a0a;
+  --primary-bg: #240185;
   --secondary-bg: #111111;
   --surface-bg: #1a1a1a;
-  --cyber-blue: #52a1f7;
-  --cyber-green: #441fa7;
+  --eilor-violet: #e65ffb;
+  --cyber-blue: #569ef5;
+  --cyber-green: #39ff14;
   --cyber-red: #ff073a;
   --cyber-orange: #ff8c00;
-  --cyber-purple: #e65ff9;
+  --cyber-purple: #8a2be2;
   --text-primary: #ffffff;
   --text-secondary: #b0b0b0;
   --text-muted: #666666;
-  --border-glow: #52a1f7;
+  --border-glow: #569ef5;
   --shadow-glow: 0 0 20px rgba(0, 245, 255, 0.3);
   --shadow-glow-intense: 0 0 30px rgba(0, 245, 255, 0.6);
 }

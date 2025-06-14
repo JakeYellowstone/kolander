@@ -107,7 +107,7 @@
                         </td>
                         <td>
                             <button class="details-btn btn" (click)="showDetails(result)">
-                                View Details
+                                Voir Détails
                             </button>
                         </td>
                     </tr>
@@ -117,7 +117,7 @@
 
         <div class="pagination" *ngIf="totalPages > 1">
             <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
-                ← Previous
+                ← Précédent
             </button>
 
             <div class="page-numbers">
@@ -128,7 +128,7 @@
             </div>
 
             <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
-                Next →
+                Suivant →
             </button>
         </div>
     </div>
