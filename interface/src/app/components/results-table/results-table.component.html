@@ -30,7 +30,7 @@
             <div class="priority-filters">
                 <button class="filter-btn" [class.active]="selectedPriority === 'all'"
                     (click)="filterByPriority('all')">
-                    Toutes ({{ filteredResults.length }})
+                    Toutes ({{ getTotalCount() }})
                 </button>
                 <button class="filter-btn priority-high" [class.active]="selectedPriority === 'high'"
                     (click)="filterByPriority('high')">

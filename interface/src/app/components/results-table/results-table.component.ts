@@ -6,7 +6,7 @@ import {
   SimpleChanges,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { DetailModalComponent } from "../modal_d\u00E9tails/details.component";
+import { DetailModalComponent } from "../modal_détails/details.component";
 
 @Component({
   selector: "app-results-table",
@@ -27,9 +27,9 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   itemsPerPage = 10;
   totalPages = 1;
 
-  //Gestion boite modal suppression
+  // Gestion boite modal
   modalVisible = false;
-  menace: '' | null = null;
+  menace: any = null;
 
   handleCancel(): void {
     this.modalVisible = false;
@@ -37,44 +37,67 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.filterByPriority("all");
+    this.initializeData();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes["results"]) {
-      this.filterByPriority(this.selectedPriority);
+    if (changes["results"] && changes["results"].currentValue) {
+      this.initializeData();
     }
+  }
+
+  private initializeData() {
+    // Réinitialiser à la première page et au filtre "all"
+    this.selectedPriority = "all";
+    this.currentPage = 1;
+    this.applyFilter();
   }
 
   filterByPriority(priority: string) {
     this.selectedPriority = priority;
+    this.currentPage = 1; // Retour à la première page lors du changement de filtre
+    this.applyFilter();
+  }
 
-    if (priority === "all") {
+  private applyFilter() {
+    // Appliquer le filtre sur les résultats complets
+    if (this.selectedPriority === "all") {
       this.filteredResults = [...this.results];
     } else {
       this.filteredResults = this.results.filter(
-        (result) => result.finalPriority === priority
+        (result) => result.finalPriority === this.selectedPriority
       );
     }
 
-    // Sort by priority score (descending)
+    // Trier par score de priorité (décroissant)
     this.filteredResults.sort((a, b) => b.priorityScore - a.priorityScore);
 
-    this.currentPage = 1;
+    // Recalculer la pagination
     this.updatePagination();
   }
 
-  updatePagination() {
-    this.totalPages = Math.ceil(
-      this.filteredResults.length / this.itemsPerPage
-    );
+  private updatePagination() {
+    // Calculer le nombre total de pages
+    this.totalPages = Math.ceil(this.filteredResults.length / this.itemsPerPage);
+    
+    // S'assurer que la page courante est valide
+    if (this.currentPage > this.totalPages && this.totalPages > 0) {
+      this.currentPage = this.totalPages;
+    }
+    if (this.currentPage < 1) {
+      this.currentPage = 1;
+    }
+
+    // Calculer les indices de début et fin pour la pagination
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
+    
+    // Extraire les éléments pour la page courante
     this.paginatedResults = this.filteredResults.slice(startIndex, endIndex);
   }
 
   goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages) {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
       this.currentPage = page;
       this.updatePagination();
     }
@@ -94,8 +117,13 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   }
 
   getPriorityCount(priority: string): number {
-    return this.results.filter((result) => result.finalPriority === priority)
-      .length;
+    // Toujours calculer sur la base des résultats complets, pas des résultats filtrés
+    return this.results.filter((result) => result.finalPriority === priority).length;
+  }
+
+  getTotalCount(): number {
+    // Retourner toujours le nombre total d'alertes détectées
+    return this.results.length;
   }
 
   getConfidenceClass(confidence: number): string {
@@ -111,6 +139,6 @@ export class ResultsTableComponent implements OnInit, OnChanges {
   }
 
   trackByIndex(index: number, item: any): number {
-    return index;
+    return item.id || index;
   }
 }
