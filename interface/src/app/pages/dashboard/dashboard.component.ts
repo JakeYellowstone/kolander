@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { AnalysisService } from '../../services/analysis.service';
+import { Component, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { RouterModule } from "@angular/router";
+import { AnalysisService } from "../../services/analysis.service";
+import { ConfirmDialogComponent } from "../../components/modal_confirm_reset/confirm.component";
 
 @Component({
-  selector: 'app-dashboard',
+  selector: "app-dashboard",
   standalone: true,
   templateUrl: "./dashboard.component.html",
-  styleUrl:"./dashboard.component.css",
-  imports: [CommonModule, RouterModule],
+  styleUrl: "./dashboard.component.css",
+  imports: [CommonModule, RouterModule, ConfirmDialogComponent],
 })
 export class DashboardComponent implements OnInit {
   stats = {
@@ -18,8 +19,10 @@ export class DashboardComponent implements OnInit {
     lowPriorityAlerts: 0,
     totalAnalyses: 0,
     detectionRate: 0,
-    averageThreatsPerAnalysis: 0
+    averageThreatsPerAnalysis: 0,
   };
+
+  showConfirmReset = false;
 
   systemStatus = {
     modelsLoaded: false,
@@ -27,6 +30,9 @@ export class DashboardComponent implements OnInit {
     configLoaded: false,
     statsLoaded: false,
     lastUpdate: new Date()
+    configLoaded: false,
+    statsLoaded: false,
+    lastUpdate: new Date(),
   };
 
   recentAlerts = [
@@ -37,12 +43,19 @@ export class DashboardComponent implements OnInit {
       priority: 'low',
       timestamp: new Date()
     }
+      group: "Système",
+      description: "Chargement des statistiques...",
+      severity: "Info",
+      priority: "low",
+      timestamp: new Date(),
+    },
   ];
 
   constructor(private analysisService: AnalysisService) {}
 
   ngOnInit() {
     this.loadSystemStatus();
+    this.loadDashboardStats();
     this.loadDashboardStats();
   }
 
@@ -53,22 +66,26 @@ export class DashboardComponent implements OnInit {
         this.systemStatus.backendConnected = true;
         this.systemStatus.configLoaded = health.configLoaded;
         this.systemStatus.statsLoaded = health.statsLoaded;
+        this.systemStatus.configLoaded = health.configLoaded;
+        this.systemStatus.statsLoaded = health.statsLoaded;
         this.systemStatus.lastUpdate = new Date();
         
+        this.updateSystemAlerts(health);
+
         this.updateSystemAlerts(health);
       },
       error: (error) => {
         this.systemStatus.backendConnected = false;
         this.recentAlerts = [
           {
-            group: 'Système',
-            description: 'Erreur de connexion au backend',
-            severity: 'Error',
-            priority: 'high',
-            timestamp: new Date()
-          }
+            group: "Système",
+            description: "Erreur de connexion au backend",
+            severity: "Error",
+            priority: "high",
+            timestamp: new Date(),
+          },
         ];
-      }
+      },
     });
   }
 
@@ -82,22 +99,22 @@ export class DashboardComponent implements OnInit {
           lowPriorityAlerts: dashboardStats.priorityBreakdown.low,
           totalAnalyses: dashboardStats.totalAnalyses,
           detectionRate: dashboardStats.detectionRate,
-          averageThreatsPerAnalysis: dashboardStats.averageThreatsPerAnalysis
+          averageThreatsPerAnalysis: dashboardStats.averageThreatsPerAnalysis,
         };
 
         // Update alerts based on stats
         this.updateStatsAlerts(dashboardStats);
       },
       error: (error) => {
-        console.error('Error loading dashboard stats:', error);
+        console.error("Error loading dashboard stats:", error);
         this.recentAlerts.push({
-          group: 'Statistiques',
-          description: 'Erreur lors du chargement des statistiques',
-          severity: 'Error',
-          priority: 'medium',
-          timestamp: new Date()
+          group: "Statistiques",
+          description: "Erreur lors du chargement des statistiques",
+          severity: "Error",
+          priority: "medium",
+          timestamp: new Date(),
         });
-      }
+      },
     });
   }
 
@@ -106,39 +123,39 @@ export class DashboardComponent implements OnInit {
 
     if (health.modelsLoaded) {
       alerts.push({
-        group: 'Modèles ML',
-        description: 'Modèles de classification chargés et opérationnels',
-        severity: 'Success',
-        priority: 'low',
-        timestamp: new Date()
+        group: "Modèles ML",
+        description: "Modèles de classification chargés et opérationnels",
+        severity: "Success",
+        priority: "low",
+        timestamp: new Date(),
       });
     } else {
       alerts.push({
-        group: 'Modèles ML',
-        description: 'Modèles non chargés - Fonctionnalité limitée',
-        severity: 'Error',
-        priority: 'high',
-        timestamp: new Date()
+        group: "Modèles ML",
+        description: "Modèles non chargés - Fonctionnalité limitée",
+        severity: "Error",
+        priority: "high",
+        timestamp: new Date(),
       });
     }
 
     if (health.configLoaded) {
       alerts.push({
-        group: 'Configuration',
-        description: 'Configuration personnalisée chargée',
-        severity: 'Success',
-        priority: 'low',
-        timestamp: new Date()
+        group: "Configuration",
+        description: "Configuration personnalisée chargée",
+        severity: "Success",
+        priority: "low",
+        timestamp: new Date(),
       });
     }
 
     if (health.statsLoaded) {
       alerts.push({
-        group: 'Statistiques',
-        description: 'Historique des analyses disponible',
-        severity: 'Success',
-        priority: 'low',
-        timestamp: new Date()
+        group: "Statistiques",
+        description: "Historique des analyses disponible",
+        severity: "Success",
+        priority: "low",
+        timestamp: new Date(),
       });
     }
 
@@ -148,19 +165,19 @@ export class DashboardComponent implements OnInit {
   private updateStatsAlerts(dashboardStats: any) {
     if (dashboardStats.totalAnalyses === 0) {
       this.recentAlerts.unshift({
-        group: 'Analyses',
-        description: 'Aucune analyse effectuée - Chargez un fichier EDR',
-        severity: 'Info',
-        priority: 'low',
-        timestamp: new Date()
+        group: "Analyses",
+        description: "Aucune analyse effectuée - Chargez un fichier EDR",
+        severity: "Info",
+        priority: "low",
+        timestamp: new Date(),
       });
     } else {
       this.recentAlerts.unshift({
-        group: 'Analyses',
+        group: "Analyses",
         description: `${dashboardStats.totalAnalyses} analyses effectuées - Taux de détection: ${dashboardStats.detectionRate}%`,
-        severity: 'Success',
-        priority: 'low',
-        timestamp: new Date()
+        severity: "Success",
+        priority: "low",
+        timestamp: new Date(),
       });
     }
 
@@ -171,33 +188,40 @@ export class DashboardComponent implements OnInit {
   refreshData() {
     this.loadSystemStatus();
     this.loadDashboardStats();
-    console.log('System status and statistics refreshed');
+    console.log("System status and statistics refreshed");
   }
 
   resetStats() {
-    if (confirm('Êtes-vous sûr de vouloir réinitialiser toutes les statistiques ?')) {
-      this.analysisService.resetDashboardStats().subscribe({
-        next: () => {
-          this.loadDashboardStats();
-          this.recentAlerts.unshift({
-            group: 'Statistiques',
-            description: 'Statistiques réinitialisées avec succès',
-            severity: 'Info',
-            priority: 'low',
-            timestamp: new Date()
-          });
-        },
-        error: (error) => {
-          console.error('Error resetting stats:', error);
-          this.recentAlerts.unshift({
-            group: 'Statistiques',
-            description: 'Erreur lors de la réinitialisation',
-            severity: 'Error',
-            priority: 'medium',
-            timestamp: new Date()
-          });
-        }
-      });
-    }
+    this.showConfirmReset = true;
+  }
+
+  onConfirmReset() {
+    this.showConfirmReset = false;
+    this.analysisService.resetDashboardStats().subscribe({
+      next: () => {
+        this.loadDashboardStats();
+        this.recentAlerts.unshift({
+          group: "Statistiques",
+          description: "Statistiques réinitialisées avec succès",
+          severity: "Info",
+          priority: "low",
+          timestamp: new Date(),
+        });
+      },
+      error: (error) => {
+        console.error("Error resetting stats:", error);
+        this.recentAlerts.unshift({
+          group: "Statistiques",
+          description: "Erreur lors de la réinitialisation",
+          severity: "Error",
+          priority: "medium",
+          timestamp: new Date(),
+        });
+      },
+    });
+  }
+
+  onCancelReset() {
+    this.showConfirmReset = false;
   }
 }

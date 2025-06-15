@@ -1,0 +1,13 @@
+{
+  "groupMultipliers": {
+    "executive": 2.5,
+    "management": 2,
+    "developer": 1.5
+  },
+  "analysisSettings": {
+    "binaryThreshold": 0.5,
+    "highPriorityThreshold": 0.8,
+    "mediumPriorityThreshold": 0.5,
+    "enableGroupModulation": true
+  }
+}
