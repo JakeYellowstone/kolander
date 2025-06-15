@@ -22,14 +22,9 @@ export class DashboardComponent implements OnInit {
     averageThreatsPerAnalysis: 0,
   };
 
-  showConfirmReset = false;
-
   systemStatus = {
     modelsLoaded: false,
     backendConnected: false,
-    configLoaded: false,
-    statsLoaded: false,
-    lastUpdate: new Date()
     configLoaded: false,
     statsLoaded: false,
     lastUpdate: new Date(),
@@ -37,12 +32,6 @@ export class DashboardComponent implements OnInit {
 
   recentAlerts = [
     {
-      group: 'Système',
-      description: 'Chargement des statistiques...',
-      severity: 'Info',
-      priority: 'low',
-      timestamp: new Date()
-    }
       group: "Système",
       description: "Chargement des statistiques...",
       severity: "Info",
@@ -51,11 +40,12 @@ export class DashboardComponent implements OnInit {
     },
   ];
 
+  showConfirmReset = false;
+
   constructor(private analysisService: AnalysisService) {}
 
   ngOnInit() {
     this.loadSystemStatus();
-    this.loadDashboardStats();
     this.loadDashboardStats();
   }
 
@@ -66,11 +56,7 @@ export class DashboardComponent implements OnInit {
         this.systemStatus.backendConnected = true;
         this.systemStatus.configLoaded = health.configLoaded;
         this.systemStatus.statsLoaded = health.statsLoaded;
-        this.systemStatus.configLoaded = health.configLoaded;
-        this.systemStatus.statsLoaded = health.statsLoaded;
         this.systemStatus.lastUpdate = new Date();
-        
-        this.updateSystemAlerts(health);
 
         this.updateSystemAlerts(health);
       },

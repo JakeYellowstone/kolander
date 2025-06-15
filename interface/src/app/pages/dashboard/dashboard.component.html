@@ -10,8 +10,6 @@
             <div class="stat-content">
                 <h3>{{ stats.totalAnalyses }}</h3>
                 <p>Analyses Effectuées</p>
-                <h3>{{ stats.totalAnalyses }}</h3>
-                <p>Analyses Effectuées</p>
             </div>
         </div>
 
@@ -36,44 +34,15 @@
         <div class="stat-card card priority-high">
             <div class="stat-icon">🔴</div>
             <div class="stat-content">
-                <h3>{{ stats.totalAlerts }}</h3>
-                <p>Menaces Détectées</p>
-            </div>
-        </div>
-
-        <div class="stat-card card priority-medium">
-            <div class="stat-icon">📊</div>
-            <div class="stat-content">
-                <h3>{{ stats.detectionRate }}%</h3>
-                <p>Taux de Détection</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="stats-grid grid grid-3" style="margin-bottom: 2rem;">
-        <div class="stat-card card priority-high">
-            <div class="stat-icon">🔴</div>
-            <div class="stat-content">
                 <h3>{{ stats.highPriorityAlerts }}</h3>
                 <p>Priorité Haute</p>
-                <p>Priorité Haute</p>
             </div>
         </div>
 
         <div class="stat-card card priority-medium">
-            <div class="stat-icon">🟡</div>
             <div class="stat-icon">🟡</div>
             <div class="stat-content">
                 <h3>{{ stats.mediumPriorityAlerts }}</h3>
-                <p>Priorité Moyenne</p>
-            </div>
-        </div>
-
-        <div class="stat-card card priority-low">
-            <div class="stat-icon">🟢</div>
-            <div class="stat-content">
-                <h3>{{ stats.lowPriorityAlerts }}</h3>
-                <p>Priorité Basse</p>
                 <p>Priorité Moyenne</p>
             </div>
         </div>
@@ -150,9 +119,8 @@
     <div class="quick-actions">
         <h2>Actions Rapides</h2>
         <div class="actions-grid grid grid-4">
-        <div class="actions-grid grid grid-4">
             <button class="action-btn btn" routerLink="/analysis">
-                📊 Faire Une Analyse
+                📊 Faire Analyse
             </button>
             <button class="action-btn btn btn-success" routerLink="/config">
                 ⚙️ Configurer
@@ -166,7 +134,6 @@
         </div>
     </div>
 </div>
-
 <app-confirm *ngIf="showConfirmReset" [message]="'Êtes-vous sûr de vouloir réinitialiser toutes les statistiques ?'"
     (confirm)="onConfirmReset()" (cancel)="onCancelReset()">
 </app-confirm>
