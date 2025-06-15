@@ -10,6 +10,7 @@ import logging
 from datetime import datetime
 import uvicorn
 import os
+import json
 from pathlib import Path
 
 # Configure logging
@@ -40,7 +41,11 @@ priority_scaler = None
 binary_features = None
 priority_features = None
 
-# Default group multipliers
+# Configuration files paths
+CONFIG_FILE = Path("config.json")
+STATS_FILE = Path("stats.json")
+
+# Default configurations
 DEFAULT_GROUP_MULTIPLIERS = {
     'executive': 2.5,
     'management': 2.0,
@@ -50,16 +55,126 @@ DEFAULT_GROUP_MULTIPLIERS = {
     'contractor': 0.8
 }
 
-# Current configuration (will be updated via API)
+DEFAULT_ANALYSIS_SETTINGS = {
+    'binaryThreshold': 0.5,
+    'highPriorityThreshold': 0.8,
+    'mediumPriorityThreshold': 0.5,
+    'enableGroupModulation': True
+}
+
+DEFAULT_STATS = {
+    'totalAnalyses': 0,
+    'totalAlertsProcessed': 0,
+    'totalThreatsDetected': 0,
+    'priorityBreakdown': {
+        'high': 0,
+        'medium': 0,
+        'low': 0
+    },
+    'lastAnalysisDate': None,
+    'createdAt': datetime.now().isoformat()
+}
+
+# Current configuration (will be loaded from file)
 current_config = {
     'groupMultipliers': DEFAULT_GROUP_MULTIPLIERS.copy(),
-    'analysisSettings': {
-        'binaryThreshold': 0.5,
-        'highPriorityThreshold': 0.8,
-        'mediumPriorityThreshold': 0.5,
-        'enableGroupModulation': True
-    }
+    'analysisSettings': DEFAULT_ANALYSIS_SETTINGS.copy()
 }
+
+# Current statistics
+current_stats = DEFAULT_STATS.copy()
+
+def load_config():
+    """Load configuration from JSON file"""
+    global current_config
+    
+    try:
+        if CONFIG_FILE.exists():
+            with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+                loaded_config = json.load(f)
+                
+            # Validate and merge with defaults
+            if 'groupMultipliers' in loaded_config:
+                current_config['groupMultipliers'] = {
+                    **DEFAULT_GROUP_MULTIPLIERS,
+                    **loaded_config['groupMultipliers']
+                }
+            
+            if 'analysisSettings' in loaded_config:
+                current_config['analysisSettings'] = {
+                    **DEFAULT_ANALYSIS_SETTINGS,
+                    **loaded_config['analysisSettings']
+                }
+                
+            logger.info("Configuration loaded from config.json")
+        else:
+            logger.info("No config.json found, using default configuration")
+            save_config()  # Create default config file
+            
+    except Exception as e:
+        logger.error(f"Error loading configuration: {str(e)}")
+        logger.info("Using default configuration")
+        current_config = {
+            'groupMultipliers': DEFAULT_GROUP_MULTIPLIERS.copy(),
+            'analysisSettings': DEFAULT_ANALYSIS_SETTINGS.copy()
+        }
+
+def save_config():
+    """Save current configuration to JSON file"""
+    try:
+        with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(current_config, f, indent=2, ensure_ascii=False)
+        logger.info("Configuration saved to config.json")
+    except Exception as e:
+        logger.error(f"Error saving configuration: {str(e)}")
+
+def load_stats():
+    """Load statistics from JSON file"""
+    global current_stats
+    
+    try:
+        if STATS_FILE.exists():
+            with open(STATS_FILE, 'r', encoding='utf-8') as f:
+                loaded_stats = json.load(f)
+                
+            # Validate and merge with defaults
+            current_stats = {**DEFAULT_STATS, **loaded_stats}
+            logger.info("Statistics loaded from stats.json")
+        else:
+            logger.info("No stats.json found, using default statistics")
+            save_stats()  # Create default stats file
+            
+    except Exception as e:
+        logger.error(f"Error loading statistics: {str(e)}")
+        logger.info("Using default statistics")
+        current_stats = DEFAULT_STATS.copy()
+
+def save_stats():
+    """Save current statistics to JSON file"""
+    try:
+        with open(STATS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(current_stats, f, indent=2, ensure_ascii=False)
+        logger.info("Statistics saved to stats.json")
+    except Exception as e:
+        logger.error(f"Error saving statistics: {str(e)}")
+
+def update_analysis_stats(total_processed: int, threats_detected: int, priority_breakdown: Dict[str, int]):
+    """Update analysis statistics"""
+    global current_stats
+    
+    current_stats['totalAnalyses'] += 1
+    current_stats['totalAlertsProcessed'] += total_processed
+    current_stats['totalThreatsDetected'] += threats_detected
+    current_stats['lastAnalysisDate'] = datetime.now().isoformat()
+    
+    # Update priority breakdown
+    for priority, count in priority_breakdown.items():
+        if priority in current_stats['priorityBreakdown']:
+            current_stats['priorityBreakdown'][priority] += count
+    
+    # Save updated stats
+    save_stats()
+    logger.info(f"Statistics updated: {threats_detected} threats detected from {total_processed} records")
 
 def load_models():
     """Load ML models and scalers"""
@@ -218,6 +333,10 @@ async def analyze_edr_data(file: UploadFile = File(...)):
         logger.info(f"Detected {len(threat_indices)} potential threats out of {len(df)} records (threshold: {binary_threshold})")
         
         if len(threat_indices) == 0:
+            # Update stats even if no threats detected
+            priority_breakdown = {'high': 0, 'medium': 0, 'low': 0}
+            update_analysis_stats(len(df), 0, priority_breakdown)
+            
             return JSONResponse({
                 "totalProcessed": len(df),
                 "threatsDetected": 0,
@@ -235,8 +354,10 @@ async def analyze_edr_data(file: UploadFile = File(...)):
             logger.error(f"Priority classification error: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Priority classification failed: {str(e)}")
         
-        # Build results
+        # Build results and count priorities
         results = []
+        priority_breakdown = {'high': 0, 'medium': 0, 'low': 0}
+        
         for i, idx in enumerate(threat_indices):
             row = df.iloc[idx]
             
@@ -279,6 +400,9 @@ async def analyze_edr_data(file: UploadFile = File(...)):
             else:
                 final_priority = 'low'
             
+            # Count priorities for stats
+            priority_breakdown[final_priority] += 1
+            
             # Create result record
             result = {
                 'id': safe_int(idx),
@@ -311,6 +435,9 @@ async def analyze_edr_data(file: UploadFile = File(...)):
         # Sort results by priority score (descending)
         results.sort(key=lambda x: x['priorityScore'], reverse=True)
         
+        # Update statistics
+        update_analysis_stats(len(df), len(results), priority_breakdown)
+        
         logger.info(f"Analysis complete. Returning {len(results)} threat records")
         
         return JSONResponse({
@@ -335,6 +462,8 @@ async def save_priority_rules(rules: List[Dict[str, Any]]):
             multipliers[rule['group']] = rule['multiplier']
         
         current_config['groupMultipliers'] = multipliers
+        save_config()  # Save to file
+        
         logger.info(f"Updated group multipliers: {multipliers}")
         
         return {"success": True, "message": "Priority rules saved successfully"}
@@ -347,12 +476,46 @@ async def save_analysis_settings(settings: Dict[str, Any]):
     """Save analysis settings configuration"""
     try:
         current_config['analysisSettings'].update(settings)
+        save_config()  # Save to file
+        
         logger.info(f"Updated analysis settings: {settings}")
         
         return {"success": True, "message": "Analysis settings saved successfully"}
     except Exception as e:
         logger.error(f"Error saving analysis settings: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to save analysis settings: {str(e)}")
+
+@app.get("/dashboard-stats")
+async def get_dashboard_stats():
+    """Get dashboard statistics"""
+    try:
+        return JSONResponse({
+            "totalAnalyses": current_stats['totalAnalyses'],
+            "totalAlertsProcessed": current_stats['totalAlertsProcessed'],
+            "totalThreatsDetected": current_stats['totalThreatsDetected'],
+            "priorityBreakdown": current_stats['priorityBreakdown'],
+            "lastAnalysisDate": current_stats['lastAnalysisDate'],
+            "detectionRate": round((current_stats['totalThreatsDetected'] / max(current_stats['totalAlertsProcessed'], 1)) * 100, 2),
+            "averageThreatsPerAnalysis": round(current_stats['totalThreatsDetected'] / max(current_stats['totalAnalyses'], 1), 2)
+        })
+    except Exception as e:
+        logger.error(f"Error getting dashboard stats: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to get dashboard stats: {str(e)}")
+
+@app.delete("/dashboard-stats/reset")
+async def reset_dashboard_stats():
+    """Reset dashboard statistics"""
+    try:
+        global current_stats
+        current_stats = DEFAULT_STATS.copy()
+        current_stats['createdAt'] = datetime.now().isoformat()
+        save_stats()
+        
+        logger.info("Dashboard statistics reset")
+        return {"success": True, "message": "Statistics reset successfully"}
+    except Exception as e:
+        logger.error(f"Error resetting stats: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to reset stats: {str(e)}")
 
 @app.get("/health")
 async def health_check():
@@ -361,6 +524,8 @@ async def health_check():
     return {
         "status": "healthy" if models_loaded else "models_not_loaded",
         "modelsLoaded": models_loaded,
+        "configLoaded": CONFIG_FILE.exists(),
+        "statsLoaded": STATS_FILE.exists(),
         "timestamp": datetime.now().isoformat()
     }
 
@@ -377,9 +542,11 @@ async def get_config():
         }
     }
 
-# Load models on startup
+# Load configuration and statistics on startup
 @app.on_event("startup")
 async def startup_event():
+    load_config()
+    load_stats()
     load_models()
 
 if __name__ == "__main__":

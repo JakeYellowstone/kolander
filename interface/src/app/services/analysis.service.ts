@@ -25,4 +25,12 @@ export class AnalysisService {
   getConfig(): Observable<any> {
     return this.http.get(`${this.apiUrl}/config`);
   }
+
+  getDashboardStats(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/dashboard-stats`);
+  }
+
+  resetDashboardStats(): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/dashboard-stats/reset`);
+  }
 }

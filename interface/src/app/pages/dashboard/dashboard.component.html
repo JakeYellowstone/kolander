@@ -8,24 +8,50 @@
         <div class="stat-card card">
             <div class="stat-icon">🛡️</div>
             <div class="stat-content">
-                <h3>{{ stats.totalAlerts }}</h3>
-                <p>Total Alertes Analysées</p>
+                <h3>{{ stats.totalAnalyses }}</h3>
+                <p>Analyses Effectuées</p>
             </div>
         </div>
 
         <div class="stat-card card priority-high">
             <div class="stat-icon">🚨</div>
             <div class="stat-content">
-                <h3>{{ stats.highPriorityAlerts }}</h3>
-                <p>Menaces d'Haute Priorité</p>
+                <h3>{{ stats.totalAlerts }}</h3>
+                <p>Menaces Détectées</p>
             </div>
         </div>
 
         <div class="stat-card card priority-medium">
-            <div class="stat-icon">⚠️</div>
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+                <h3>{{ stats.detectionRate }}%</h3>
+                <p>Taux de Détection</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-grid grid grid-3" style="margin-bottom: 2rem;">
+        <div class="stat-card card priority-high">
+            <div class="stat-icon">🔴</div>
+            <div class="stat-content">
+                <h3>{{ stats.highPriorityAlerts }}</h3>
+                <p>Priorité Haute</p>
+            </div>
+        </div>
+
+        <div class="stat-card card priority-medium">
+            <div class="stat-icon">🟡</div>
             <div class="stat-content">
                 <h3>{{ stats.mediumPriorityAlerts }}</h3>
-                <p>Alerte de Priorité Moyenne</p>
+                <p>Priorité Moyenne</p>
+            </div>
+        </div>
+
+        <div class="stat-card card priority-low">
+            <div class="stat-icon">🟢</div>
+            <div class="stat-content">
+                <h3>{{ stats.lowPriorityAlerts }}</h3>
+                <p>Priorité Basse</p>
             </div>
         </div>
     </div>
@@ -49,15 +75,17 @@
                     </span>
                 </div>
                 <div class="status-item">
-                    <span class="status-label">Classification Binaire</span>
-                    <span class="status-value" [class.online]="systemStatus.modelsLoaded">
-                        {{ systemStatus.modelsLoaded ? 'Model 1 Prêt' : 'Indisponible' }}
+                    <span class="status-label">Configuration</span>
+                    <span class="status-value" [class.online]="systemStatus.configLoaded" 
+                          [class.offline]="!systemStatus.configLoaded">
+                        {{ systemStatus.configLoaded ? 'Chargée' : 'Par défaut' }}
                     </span>
                 </div>
                 <div class="status-item">
-                    <span class="status-label">Priorisation</span>
-                    <span class="status-value" [class.online]="systemStatus.modelsLoaded">
-                        {{ systemStatus.modelsLoaded ? 'Model 2 Prêt' : 'Indisponible' }}
+                    <span class="status-label">Statistiques</span>
+                    <span class="status-value" [class.online]="systemStatus.statsLoaded" 
+                          [class.offline]="!systemStatus.statsLoaded">
+                        {{ systemStatus.statsLoaded ? 'Persistantes' : 'Temporaires' }}
                     </span>
                 </div>
                 <div class="status-item">
@@ -90,7 +118,7 @@
 
     <div class="quick-actions">
         <h2>Actions Rapides</h2>
-        <div class="actions-grid grid grid-3">
+        <div class="actions-grid grid grid-4">
             <button class="action-btn btn" routerLink="/analysis">
                 📊 Faire Une Analyse
             </button>
@@ -99,6 +127,9 @@
             </button>
             <button class="action-btn btn btn-danger" (click)="refreshData()">
                 🔄 Actualiser État
+            </button>
+            <button class="action-btn btn btn-danger" (click)="resetStats()">
+                🗑️ Reset Statistiques
             </button>
         </div>
     </div>
