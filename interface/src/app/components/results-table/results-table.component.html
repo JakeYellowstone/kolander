@@ -46,10 +46,45 @@
                 </button>
             </div>
         </div>
+
+        <!-- Search Bar -->
+        <div class="search-controls">
+            <div class="search-bar">
+                <div class="search-input-container">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        placeholder="Rechercher dans les alertes (hostname, processus, groupe, etc.)"
+                        [(ngModel)]="searchTerm"
+                        (input)="onSearchChange()"
+                    >
+                    <button class="search-clear-btn" *ngIf="isSearchActive()" (click)="clearSearch()">
+                        ✕
+                    </button>
+                </div>
+                <div class="search-icon">🔍</div>
+            </div>
+            <div class="search-results-info" *ngIf="isSearchActive()">
+                <span class="search-results-text">{{ getSearchResultsText() }}</span>
+            </div>
+        </div>
     </div>
 
     <div class="results-table-container">
-        <div class="table-wrapper">
+        <!-- No Results Message -->
+        <div class="no-results-message" *ngIf="!hasSearchResults() && isSearchActive()">
+            <div class="no-results-content">
+                <div class="no-results-icon">🔍</div>
+                <h3>Aucun résultat trouvé</h3>
+                <p>Aucune alerte ne correspond à votre recherche "{{ searchTerm }}"</p>
+                <button class="btn btn-success" (click)="clearSearch()">
+                    Effacer la recherche
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="table-wrapper" *ngIf="hasSearchResults() || !isSearchActive()">
             <table class="results-table">
                 <thead>
                     <tr>
@@ -115,7 +150,7 @@
             </table>
         </div>
 
-        <div class="pagination" *ngIf="totalPages > 1">
+        <div class="pagination" *ngIf="totalPages > 1 && hasSearchResults()">
             <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
                 ← Précédent
             </button>
