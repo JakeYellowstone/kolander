@@ -91,7 +91,7 @@
                 <div class="status-item">
                     <span class="status-label">Dernière Mise à Jour</span>
                     <span class="status-value online">
-                        {{ systemStatus.lastUpdate | date:'short' }}
+                        {{ systemStatus.lastUpdate | date:'fullDate' }}
                     </span>
                 </div>
             </div>
@@ -120,7 +120,7 @@
         <h2>Actions Rapides</h2>
         <div class="actions-grid grid grid-4">
             <button class="action-btn btn" routerLink="/analysis">
-                📊 Faire Analyse
+                📊 Analyser
             </button>
             <button class="action-btn btn btn-success" routerLink="/config">
                 ⚙️ Configurer
