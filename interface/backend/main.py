@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="Kolander OCI Analysis API",
+    title="Kolander Analysis API",
     description="AI-powered security analysis for VMware Carbon Black EDR data",
     version="2.0.0"
 )

@@ -12,5 +12,5 @@ import { FooterComponent } from './components/footer/footer.component';
   imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
 })
 export class AppComponent {
-  title = 'Kolander-OCI';
+  title = 'Kolander';
 }
